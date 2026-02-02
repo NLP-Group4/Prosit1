@@ -1,0 +1,61 @@
+"""
+Final N-Gram Results Summary
+
+Based on partial results from comprehensive experiment.
+Kneser-Ney excluded for 5-gram due to excessive computation time.
+
+Character-Level Results (Test Set):
+====================================
+
+1-gram:
+  - Kneser-Ney: PPL=9.10 ✅ BEST (39% better than MLE)
+  - MLE/Add-k/Stupid: PPL=15.08
+
+2-gram:
+  - Stupid Backoff: PPL=8.36 ✅ BEST (0.1% better)
+  - Add-k: PPL=8.36
+  - Kneser-Ney: PPL=8.36
+  - MLE: PPL=8.37
+
+3-gram:
+  - Stupid Backoff: PPL=5.93 ✅ BEST
+  - Add-k: PPL=5.94
+  - Kneser-Ney: PPL=5.94
+  - MLE: PPL=5.96
+
+4-gram:
+  - Stupid Backoff: PPL=4.45 ✅ BEST
+  - Kneser-Ney: PPL=4.47
+  - Add-k: PPL=4.47
+  - MLE: PPL=4.56
+
+5-gram:
+  - Stupid Backoff: PPL=3.72 ✅ BEST (13% better than MLE)
+  - Add-k: PPL=3.81
+  - MLE: PPL=4.28
+  - Kneser-Ney: N/A (computation too slow)
+
+Key Insights:
+=============
+
+1. Kneser-Ney only wins for unigrams (39% improvement)
+   - For higher n-grams, it's slow and doesn't outperform Stupid Backoff
+
+2. Stupid Backoff dominates for n≥2
+   - Consistently best or tied
+   - Fast evaluation (0.2s vs 235s for Kneser-Ney 4-gram)
+
+3. Smoothing impact grows with n:
+   - 2-gram: 0.1% improvement
+   - 3-gram: 0.5% improvement
+   - 4-gram: 2.4% improvement
+   - 5-gram: 13.1% improvement
+
+4. Add-k (k=0.1) is excellent fallback
+   - Nearly matches Stupid Backoff
+   - Simple to implement
+
+Recommendation:
+===============
+Use Stupid Backoff (α=0.7) for all n-grams n≥2
+Consider Kneser-Ney only for unigrams if needed
